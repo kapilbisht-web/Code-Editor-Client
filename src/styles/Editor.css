@@ -1,0 +1,147 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.run-btn {
+  background: #007acc;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: fit-content;
+}
+
+.run-btn:hover {
+  background: #005fa3;
+}
+
+.delete-btn {
+  background: #4a4645ff;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #990000;
+}
+
+.output-box {
+ background-color: #1e1e1e;       /* dark theme background */
+  color: #d4d4d4;                  /* light text for readability */
+  border: 2px solid #007acc;       /* highlight border (VS Code blue) */
+  border-radius: 6px;              /* smooth corners */
+  padding: 12px;
+  margin-top: 12px;
+  min-height: 120px;               /* ensure visible space */
+  font-family: Consolas, monospace;/* code-like font */
+  box-shadow: 0 0 8px rgba(0, 122, 204, 0.6); /* glowing effect */
+
+}
+.output-section {
+  margin-top: 16px;
+}
+
+.output-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #007acc;
+  margin-bottom: 6px;
+}
+
+.copy-btn {
+  background: #5e5050ff;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: fit-content;
+}
+
+.copy-btn:hover {
+  background: #222;
+}
+
+.resizable-editor {
+  position: relative;
+  border: 1px solid #ccc;
+}
+
+.resize-handle {
+  height: 8px;
+  background: #ddd;
+  cursor: ns-resize;
+}
+.top-right {
+  display: flex;
+  justify-content: flex-end; /* ✅ push to right */
+  margin-bottom: 8px;
+}
+
+
+.theme-btn {
+  background: #666;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.theme-btn:hover {
+  background: #444;
+}
+.output {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.output.success {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: 1px solid #333;
+}
+
+.output.error {
+  background: #2a0000;
+  color: #ff4d4d;
+  border: 1px solid #ff0000;
+}
+.editor-header {
+  display: flex;
+  flex-direction: column; /* stack rows */
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between; /* title left, toggle right */
+  align-items: center;
+  width: 100%;
+}
+
+.editor-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #007acc;
+  margin: 0;
+}
