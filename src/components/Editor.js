@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import socket from "../utils/socket";
 import "../styles/Editor.css";
-import LanguageSelector from "./LanguageSelector.js";
-
+import LanguageSelector from "./LanguageSelector";
+import Toolbar from "./Toolbar";
+import OutputSection from "./OutputSection";
 
 export default function CodeEditor({ language, setLanguage }) {
   const [code, setCode] = useState("");
@@ -11,6 +12,14 @@ export default function CodeEditor({ language, setLanguage }) {
   const [errorOutput, setErrorOutput] = useState("");
   const [editorHeight, setEditorHeight] = useState(400);
   const [theme, setTheme] = useState("vs-light");
+  const [execInfo, setExecInfo] = useState({ timeMs: null, memoryMB: null });
+
+  // ✅ Ref to Monaco editor instance
+  const editorRef = useRef(null);
+
+  const handleEditorDidMount = (editor) => {
+    editorRef.current = editor;
+  };
 
   useEffect(() => {
     socket.on("code-update", (newCode) => setCode(newCode));
@@ -19,13 +28,17 @@ export default function CodeEditor({ language, setLanguage }) {
 
   useEffect(() => {
     socket.on("code-output", (result) => {
+      const end = performance.now();
       setOutput(result);
       setErrorOutput("");
+      setExecInfo({ timeMs: Math.round(end), memoryMB: null });
     });
 
     socket.on("code-error", (err) => {
+      const end = performance.now();
       setErrorOutput(err);
       setOutput("");
+      setExecInfo({ timeMs: Math.round(end), memoryMB: null });
     });
 
     return () => {
@@ -34,22 +47,18 @@ export default function CodeEditor({ language, setLanguage }) {
     };
   }, []);
 
-  // ✅ Debounced socket emit
- 
-
-  const handleChange = (value) => {
-    setCode(value);
-  
-  };
+  const handleChange = (value) => setCode(value);
 
   const runCode = () => {
-    console.log("Running code:", { code, language });
+    const start = performance.now();
     socket.emit("run-code", { code, language });
+    setExecInfo({ timeMs: performance.now() - start, memoryMB: null });
   };
 
   const clearOutput = () => {
     setOutput("");
     setErrorOutput("");
+    setExecInfo({ timeMs: null, memoryMB: null });
   };
 
   const copyOutput = () => {
@@ -60,9 +69,8 @@ export default function CodeEditor({ language, setLanguage }) {
     }
   };
 
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setTheme((prev) => (prev === "vs-dark" ? "vs-light" : "vs-dark"));
-  };
 
   const startResize = (e) => {
     const startY = e.clientY;
@@ -101,39 +109,26 @@ export default function CodeEditor({ language, setLanguage }) {
           language={language}
           value={code}
           onChange={handleChange}
-          options={{
-            fontSize: 14,
-            minimap: { enabled: false },
-          }}
+          onMount={handleEditorDidMount}   // ✅ capture editor instance
+          options={{ fontSize: 14, minimap: { enabled: false } }}
         />
         <div className="resize-handle" onMouseDown={startResize}></div>
       </div>
 
       {/* Toolbar */}
-      <div className="toolbar">
-        <button onClick={runCode} className="run-btn">Run</button>
-        <button onClick={clearOutput} className="delete-btn">🗑️</button>
-        <button onClick={copyOutput} className="copy-btn">📋</button>
-      </div>
+      <Toolbar
+        runCode={runCode}
+        clearOutput={clearOutput}
+        copyOutput={copyOutput}
+        editorRef={editorRef}
+      />
 
       {/* Output Section */}
-      <div className="output-section">
-        <h3 className="output-title">Output</h3>
-        {output && (
-          <div className="output-box success">
-            {output.split("\n").map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </div>
-        )}
-        {errorOutput && (
-          <div className="output-box error">
-            {errorOutput.split("\n").map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </div>
-        )}
-      </div>
+      <OutputSection
+        output={output}
+        errorOutput={errorOutput}
+        execInfo={execInfo}
+      />
     </div>
   );
 }

@@ -2,7 +2,9 @@
   display: flex;
   gap: 8px;
   margin-top: 12px;
+  align-items: center;
 }
+
 
 .run-btn {
   background: #007acc;
@@ -40,7 +42,8 @@
  background-color: #1e1e1e;       /* dark theme background */
   color: #d4d4d4;                  /* light text for readability */
   border: 2px solid #007acc;       /* highlight border (VS Code blue) */
-  border-radius: 6px;              /* smooth corners */
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0, 122, 204, 0.4); 
   padding: 12px;
   margin-top: 12px;
   min-height: 120px;               /* ensure visible space */
@@ -77,12 +80,18 @@
 
 .resizable-editor {
   position: relative;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
 }
 
 .resize-handle {
   height: 8px;
-  background: #ddd;
+  background: repeating-linear-gradient(
+    to right,
+    #007acc,
+    #007acc 2px,
+    transparent 2px,
+    transparent 4px
+  );
   cursor: ns-resize;
 }
 .top-right {
