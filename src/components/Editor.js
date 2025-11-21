@@ -4,6 +4,7 @@ import socket from "../utils/socket";
 import "../styles/Editor.css";
 import LanguageSelector from "./LanguageSelector.js";
 
+
 export default function CodeEditor({ language, setLanguage }) {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
@@ -33,14 +34,16 @@ export default function CodeEditor({ language, setLanguage }) {
     };
   }, []);
 
+  // ✅ Debounced socket emit
+ 
+
   const handleChange = (value) => {
     setCode(value);
-    socket.emit("code-change", value);
+  
   };
 
-  // ✅ FIXED: Send both code and language
   const runCode = () => {
-    console.log("Running code:", { code, language }); // Debug log
+    console.log("Running code:", { code, language });
     socket.emit("run-code", { code, language });
   };
 
@@ -108,13 +111,12 @@ export default function CodeEditor({ language, setLanguage }) {
 
       {/* Toolbar */}
       <div className="toolbar">
-        {/* ✅ FIXED: Run button only calls runCode */}
         <button onClick={runCode} className="run-btn">Run</button>
         <button onClick={clearOutput} className="delete-btn">🗑️</button>
         <button onClick={copyOutput} className="copy-btn">📋</button>
       </div>
 
-      {/* ✅ Output Section */}
+      {/* Output Section */}
       <div className="output-section">
         <h3 className="output-title">Output</h3>
         {output && (
