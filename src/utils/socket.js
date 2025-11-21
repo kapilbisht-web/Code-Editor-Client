@@ -1,4 +1,8 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000"); // backend server URL
+// Use your Render backend URL instead of localhost
+const socket = io("https://code-editor-server-0ho1.onrender.com", {
+  transports: ["websocket"], // helps avoid polling issues
+});
+
 export default socket;
